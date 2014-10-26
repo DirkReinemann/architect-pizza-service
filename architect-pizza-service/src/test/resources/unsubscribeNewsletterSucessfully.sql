@@ -1,0 +1,1 @@
+INSERT INTO newsletter(id, email, state) VALUES (1, 'test@test.de', 'REGISTER');

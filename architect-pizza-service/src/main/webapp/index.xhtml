@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        
+<ui:composition template="resources/templates/user.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+        
+    <ui:define name="head"></ui:define>
+    
+    <ui:define name="main">
+      <div class="section">
+        <div class="section_header">PIZZA OF THE WEEK</div>
+        <div class="section_body pizza_of_the_week">
+          <h:graphicImage library="img" name="pizza.png" alt="Pizza Template" />
+          <h:form>
+            <span class="ingredients"><h:outputText value="#{pizzaController.pizzaOfTheWeek.ingredientsString}" /></span>
+            <span class="price">
+              <h:outputText value="#{pizzaController.pizzaOfTheWeek.price}">
+                <f:convertNumber pattern="#0.00" />
+              </h:outputText> 
+            €</span>
+            <div>
+              <h:commandButton styleClass="button_blue" value="EDIT" action="#{orderController.editPizza(pizzaController.pizzaOfTheWeek)}" />
+              <h:commandButton styleClass="button_blue" value="ADD" action="#{orderController.order.addPizza(pizzaController.pizzaOfTheWeek)}">
+                <f:ajax render=":cart" />
+              </h:commandButton>
+            </div>
+          </h:form>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section_header">RECENTS PIZZAS</div>
+        <div class="section_body recent_pizzas">
+          <ul>
+            <ui:repeat value="#{pizzaController.recentPizzas}" var="pizza">
+              <li>
+                <h:graphicImage library="img" name="pizza.png" alt="Pizza Template" height="80" width="140" />
+                <h:form>
+                  <span class="ingredients"><h:outputText value="#{pizza.ingredientsString}" /></span>
+                  <span class="price">
+                    <h:outputText value="#{pizza.price}">
+                      <f:convertNumber pattern="#0.00" />
+                    </h:outputText>
+                  €</span>
+                  <div>
+                    <h:commandLink styleClass="button_silver" action="#{orderController.editPizza(pizza)}">
+                      <h:graphicImage library="img" name="edit.png" alt="EDIT" />
+                    </h:commandLink>
+                    <h:commandLink styleClass="button_silver" action="#{orderController.order.addPizza(pizza)}">
+                      <h:graphicImage library="img" name="cart_add.png" alt="ADD" />
+                      <f:ajax render=":cart" />
+                    </h:commandLink>
+                  </div>
+                </h:form> 
+              </li>
+            </ui:repeat>
+          </ul>
+        </div>
+      </div>
+      
+      <script>
+      	$(document).ready(function() {
+    		$('.recent_pizzas li').last().css('border', 'none');
+    	});
+      </script>
+    </ui:define>
+    
+</ui:composition>

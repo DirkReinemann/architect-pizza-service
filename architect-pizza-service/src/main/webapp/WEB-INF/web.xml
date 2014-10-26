@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<display-name>architect-pizza-service</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<error-code>400</error-code>
+		<location>/error/bad.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/unauthorized.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/bad.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/internal.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>503</error-code>
+		<location>/error/internal.xhtml</location>
+	</error-page>
+
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>META-INF/log4j.xml</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<security-role>
+		<role-name>ADMIN</role-name>
+	</security-role>
+
+	<security-role>
+		<role-name>USER</role-name>
+	</security-role>
+	
+	<security-role>
+		<role-name>EMPLOYEE</role-name>
+	</security-role>
+
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/login.xhtml</form-login-page>
+			<form-error-page>/unauthorized.xhtml</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<security-constraint>
+		<display-name>order</display-name>
+		<web-resource-collection>
+			<web-resource-name>order</web-resource-name>
+			<description />
+			<url-pattern>/order.xhtml</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description />
+			<role-name>USER</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<display-name>tracking</display-name>
+		<web-resource-collection>
+			<web-resource-name>tracking</web-resource-name>
+			<description />
+			<url-pattern>/tracking.xhtml</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description />
+			<role-name>USER</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<display-name>user</display-name>
+		<web-resource-collection>
+			<web-resource-name>user</web-resource-name>
+			<description />
+			<url-pattern>/user/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description />
+			<role-name>USER</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<security-constraint>
+		<display-name>admin</display-name>
+		<web-resource-collection>
+			<web-resource-name>admin</web-resource-name>
+			<description />
+			<url-pattern>/admin/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description />
+			<role-name>ADMIN</role-name>
+			<role-name>EMPLOYEE</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+</web-app>

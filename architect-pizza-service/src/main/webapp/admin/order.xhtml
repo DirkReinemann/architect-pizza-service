@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../resources/templates/admin.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="main">
+      <div class="section">
+        <div class="section_header">PROCESS ORDER</div>
+        <h:panelGroup layout="block" id="processOrderState" styleClass="section_body">
+          <h:form>
+            <h:dataTable styleClass="table" value="#{orderProcessController.orders}" var="order" rowClasses="odd_row, even_row" cellspacing="0" cellpadding="0">
+              <h:column>
+                <f:facet name="header">ORDER TIME</f:facet>
+                <h:outputText value="#{order.orderTime}">
+                  <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+                </h:outputText>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">DELIVERY TIME</f:facet>
+                <h:outputText value="#{order.deliveryTime}">
+                  <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+                </h:outputText>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">PAYMENT</f:facet>
+                <h:outputText value="#{order.payment.label}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">ORDER STATE</f:facet>
+                <h:outputText value="#{order.orderState}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header"></f:facet>
+                <h:commandButton rendered="#{order.orderState != 'DELIVERED'}" styleClass="button_blue" value="PROCESS" action="#{orderProcessController.processOrder(order.id)}">
+                  <f:ajax render=":processOrderState" execute="@this" />
+                </h:commandButton>
+              </h:column>
+            </h:dataTable>
+          </h:form>
+        </h:panelGroup>
+      </div>
+    </ui:define>
+
+</ui:composition>

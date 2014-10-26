@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+  <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <title>Architect Pizza Service</title>
+    <h:outputStylesheet library="css" name="application.min.css" />
+    <h:outputScript library="js" name="jquery.js" />
+    <h:outputScript library="js" name="application.min.js" />
+    <ui:insert name="head" />
+  </h:head>
+
+  <h:body>
+    <div class="all">
+      <div class="header">
+        <div class="header_top">
+          <h:link outcome="start">
+            <h:graphicImage library="img" name="logo.png" alt="Architect Pizza Service" />
+          </h:link>
+          <h:panelGroup styleClass="authentication" rendered="#{authenticationController.isLoggedIn()}">
+            <h:form>
+              <h:commandButton styleClass="button_silver" value="LOGOUT" action="#{authenticationController.logout()}" />
+            </h:form>
+          </h:panelGroup>
+          <h:panelGroup styleClass="authentication" rendered="#{!authenticationController.isLoggedIn()}">
+            <h:button styleClass="button_silver" value="LOGIN" outcome="login.xhtml" />
+            <h:button styleClass="button_silver" value="REGISTER" outcome="register.xhtml" />
+          </h:panelGroup>
+        </div>
+        <div class="header_bottom">
+          <ui:insert name="header_bottom" />
+        </div>
+      </div>
+        
+      <div class="middle">
+        <div class="left">
+          <ui:insert name="left" />
+      	</div>
+      	
+        <div class="main">
+          <ui:insert name="main" />
+        </div>
+      </div>
+      
+      <div class="footer">
+        <ui:insert name="footer" />
+      </div>
+    </div>
+  </h:body>
+</html>

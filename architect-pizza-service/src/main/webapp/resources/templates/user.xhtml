@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<ui:composition template="template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="header_bottom">
+	  <ul>
+        <li><h:link outcome="configurator.xhtml" value="PIZZA BUILDER" /></li>
+        <li><h:link rendered="#{authenticationController.isLoggedIn()}" outcome="tracking.xhtml" value="ORDER TRACKING" /></li>
+        <li><h:link rendered="#{authenticationController.isLoggedIn()}" outcome="profile.xhtml" value="USER PROFILE" /></li>
+      </ul>
+	</ui:define>
+
+	<ui:define name="left">
+	  <h:panelGroup id="cart" styleClass="cart">
+        <div class="cart_header">CART</div>
+        <div>
+          <div class="cart_form">
+            <h:button styleClass="button_blue" value="ORDER" outcome="order.xhtml" />
+            <div>Total: 
+              <h:outputText id="total" value="#{orderController.order.total}">
+                <f:convertNumber type="number" pattern="#0.00 €" />
+              </h:outputText>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <c:forEach items="#{orderController.order.orderPositions}" var="orderPosition">
+            <li>
+              <table>
+                <tr>
+                  <td class="number">
+                    <h:form>
+                      <h:commandLink action="#{orderController.order.increasePizzaAmount(orderController.order.orderPositions.indexOf(orderPosition))}">
+                        <h:graphicImage library="img" name="up.png" alt="Increase" />
+                        <f:ajax render="count :total" />
+                      </h:commandLink>
+                      <span><h:outputText id="count" value="#{orderPosition.amount}" /></span>
+                      <h:commandLink action="#{orderController.order.decreasePizzaAmount(orderController.order.orderPositions.indexOf(orderPosition))}">
+                        <h:graphicImage library="img" name="down.png" alt="Decrease" />
+                        <f:ajax render="count :total" />
+                      </h:commandLink>
+                    </h:form>
+                  </td>
+                  <td class="ingredients"><h:outputText value="#{orderPosition.pizza.ingredientsString}" /></td>
+                  <td class="price">
+                    <h:outputText value="#{orderPosition.pizza.price}">
+                      <f:convertNumber type="number" pattern="#0.00 €" />
+                    </h:outputText>
+                  </td>
+                </tr>
+              </table>
+              <div>
+                <h:form>
+                  <h:commandLink action="#{orderController.order.removeOrderPosition(orderController.order.orderPositions.indexOf(orderPosition))}">
+                    <h:graphicImage library="img" name="cart_delete.png" alt="Remove" />
+                    <f:ajax render=":cart" />
+                  </h:commandLink>
+                </h:form>  
+              </div>
+            </li>
+          </c:forEach>
+        </ul>
+      </h:panelGroup>
+	</ui:define>
+	
+	<ui:define name="footer">
+	  <ul>
+        <li><h:link outcome="contact.xhtml">Contact</h:link></li>
+        <li><h:link outcome="newsletter.xhtml">Newsletter</h:link></li>
+      </ul>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,5 @@
+INSERT INTO pizza(id) VALUES (1);
+INSERT INTO pizza(id) VALUES (2);
+INSERT INTO pizza(id) VALUES (3);
+INSERT INTO pizza(id) VALUES (4);
+INSERT INTO pizza(id) VALUES (5);

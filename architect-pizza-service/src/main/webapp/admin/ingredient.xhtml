@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="../resources/templates/admin.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    
+    <ui:define name="main">
+      <div class="section">
+        <div class="section_header">CREATE INGREDIENT</div>
+        <div class="section_body">
+          <h:form class="formular">
+            <label>Name: *</label>
+            <h:inputText id="name" styleClass="input_silver" value="#{ingredientController.name}">
+              <f:validateRequired />
+              <f:validator binding="#{uniqueIngredientValidator}" />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="name" /><br/>
+            
+            <label>Price: *</label>
+            <h:inputText id="price" styleClass="input_silver" value="#{ingredientController.price}">
+              <f:convertNumber pattern="#.#" />
+              <f:validateRequired />
+              <f:validateDoubleRange minimum="0.5" maximum="5.0" />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="price" /><br/>
+            
+            <label>Category: *</label>
+            <h:selectOneMenu id="category" styleClass="input_silver" value="#{ingredientController.idCategory}">
+              <f:selectItems value="#{ingredientController.categories}" var="category" itemValue="#{category.id}" itemLabel="#{category.name}" />
+              <f:validateRequired />
+            </h:selectOneMenu>
+            <h:message styleClass="errorMessage" for="category" /><br/>
+            
+            <h:commandButton styleClass="button_blue" value="CREATE" action="#{ingredientController.createIngredient()}">
+              <f:ajax render="@form :editIngredient" execute="@form" />
+            </h:commandButton>
+          </h:form>
+        </div>
+      </div>
+    
+      <div class="section">
+        <div class="section_header">INGREDIENTS</div>
+        <h:panelGroup layout="block" id="editIngredient" styleClass="section_body">
+          <h:form prependId="false" id="editIngredientForm">
+            <h:dataTable styleClass="table message_table" value="#{ingredientController.ingredients}" var="ingredient" rowClasses="odd_row, even_row" cellspacing="0" cellpadding="0">
+              <h:column>
+                <f:facet name="header">NAME</f:facet>
+                <h:outputText value="#{ingredient.name}" />
+              </h:column>
+              
+              <h:column>
+                <f:facet name="header">PRICE</f:facet>
+                
+                <h:outputText rendered="#{!ingredientController.isUpdateable(ingredient.id)}" value="#{ingredient.price}" />
+                
+                <h:inputText rendered="#{ingredientController.isUpdateable(ingredient.id)}" id="changedPrice" style="width: 50px" styleClass="input_silver" value="#{ingredientController.price}">
+                  <f:validateRequired />
+                </h:inputText>
+              </h:column>
+              
+              <h:column>
+                <f:facet name="header">CATEGORY</f:facet>
+                
+                <h:outputText rendered="#{!ingredientController.isUpdateable(ingredient.id)}" value="#{ingredient.category.name}" />
+                
+                <h:selectOneMenu rendered="#{ingredientController.isUpdateable(ingredient.id)}" id="changedCategory" style="width: 150px" styleClass="input_silver" value="#{ingredientController.idCategory}">
+                  <f:selectItems value="#{ingredientController.categories}" var="category" itemValue="#{category.id}" itemLabel="#{category.name}" />
+                  <f:validateRequired />
+                </h:selectOneMenu>
+              </h:column>
+              
+              <h:column>
+                <f:facet name="header"></f:facet>
+                
+                <h:commandLink styleClass="button_silver" rendered="#{!ingredientController.isUpdateable(ingredient.id)}" action="#{ingredientController.setUpdateable(ingredient.id)}">
+                  <h:graphicImage library="img" name="edit.png" alt="Edit" title="Edit" />
+                  <f:ajax render=":editIngredient" execute="@this" />
+                </h:commandLink>
+                
+                <h:commandLink styleClass="button_silver" rendered="#{!ingredientController.isUpdateable(ingredient.id)}" action="#{ingredientController.deleteIngredient(ingredient.id)}" onclick="return confirm('Are you sure?')">
+                  <h:graphicImage library="img" name="delete.png" alt="Delete" title="Delete" />
+                  <f:ajax render=":editIngredient" execute="@this" onerror="handleTableMessage" />
+                </h:commandLink>
+                
+                <h:commandLink styleClass="button_silver" rendered="#{ingredientController.isUpdateable(ingredient.id)}" action="#{ingredientController.updateIngredient(ingredient.id)}">
+                  <h:graphicImage library="img" name="accept.png" alt="Save" title="Save" />
+                  <f:ajax render=":editIngredient" execute="@this changedCategory changedPrice" />
+                </h:commandLink>
+                
+                <h:commandLink styleClass="button_silver" rendered="#{ingredientController.isUpdateable(ingredient.id)}" action="#{ingredientController.cancelUpdate(ingredient.id)}">
+                  <h:graphicImage library="img" name="cancel.png" alt="Cancel" title="Cancel" />
+                  <f:ajax render=":editIngredient" execute="@this" />
+                </h:commandLink>
+              </h:column> 	
+              
+              <h:column>
+                <span class="errorMessage" style="display: none;" id="deleteMessage_#{ingredient.id}"></span>
+              </h:column>
+            </h:dataTable>
+          </h:form>
+        </h:panelGroup>
+      </div>
+    </ui:define>
+    
+</ui:composition>

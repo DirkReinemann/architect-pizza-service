@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="resources/templates/user.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    
+	<ui:define name="main">
+		<div class="configurator_left">
+			<div class="section ingredient">
+				<div class="section_header">INGREDIENTS</div>
+				
+				<div id="categories" class="categories">
+					<c:forEach items="#{orderController.categories}" var="category">
+						<div id="#{category.name}" class="category_name"><h:outputText value="#{category.name}" /></div>
+					</c:forEach>
+					<br style="clear: both"/>
+				</div>
+	
+				<div class="categories_spacer">
+					<div class="name" onclick="sortIngredients('NAME')">NAME</div>
+					<div class="price" onclick="sortIngredients('PRICE')">PRICE</div>
+				</div>
+	
+				<div id="ingredients" class="section_body">
+					<h:form id="ingredientForm">
+						<ul id="ingredientList">
+							<c:forEach items="#{orderController.ingredients}" var="ingredient">
+								<h:commandLink id="i_#{ingredient.id}" action="#{orderController.pizza.addIngredient(ingredient)}">
+									<li class="#{ingredient.category.name}">
+										<div class="name"><h:outputText value="#{ingredient.name}" /></div>
+										<div class="price">
+											<h:outputText value="#{ingredient.price}">
+												<f:convertNumber pattern="#0.00 €" />
+											</h:outputText>
+										</div>
+									</li>
+									<f:ajax render=":pizza" onevent="onAddIngredientClicked" />
+								</h:commandLink>
+							</c:forEach>
+						</ul>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+		<div id="configurator_right" class="configurator_right">
+			<div class="section ingredient">
+				<div class="section_header">PIZZA</div>
+
+				<h:panelGroup id="pizza" layout="block" class="section_body">
+					<h:form>
+						<div class="cart_form">
+							<h:commandButton styleClass="button_blue" value="ADD PIZZA" action="#{orderController.addPizza()}">
+								<f:ajax render=":pizza :cart" onevent="addAddPizzaClicked" />
+							</h:commandButton>
+							
+							<div>
+								<h:outputText value="Total: " />
+								<span>
+									<h:outputText value="#{orderController.pizza.price}">
+										<f:convertNumber type="number" pattern="#0.00 €" />
+									</h:outputText>
+								</span>
+							</div>
+						</div>
+					</h:form>
+
+					<div>
+						<h:form id="ingredientPizzaForm">
+							<ul id="ingredientPizzaList">
+								<c:forEach items="#{orderController.pizza.ingredients}" var="ingredient">
+									<li id="li_#{ingredient.id}">
+										<h:commandLink id="i_#{ingredient.id}" action="#{orderController.pizza.removeIngredient(orderController.pizza.ingredients.indexOf(ingredient))}">
+											<div class="name"><h:outputText value="#{ingredient.name}" /></div>
+											<div class="price">
+												<h:outputText value="#{ingredient.price}">
+													<f:convertNumber pattern="#0.00 €" />
+												</h:outputText>
+											</div>
+											<f:ajax render=":pizza" onevent="onRemoveIngredientClicked" />
+										</h:commandLink>
+									</li>
+								</c:forEach>
+							</ul>
+						</h:form>
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+		
+		<div style="clear: both; height: 20px;" />
+	</ui:define>
+
+</ui:composition>

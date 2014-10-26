@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="resources/templates/user.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="main">
+      <div class="section">
+        <div class="section_header">REGISTER</div>
+        <div class="section_body">
+          <h:form class="formular">
+            <label>First Name: *</label>
+            <h:inputText id="firstName" styleClass="input_silver" value="#{registrationController.firstname}">
+              <f:validateRequired />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="firstName" /><br/>
+
+            <label>Last Name: *</label>
+            <h:inputText id="lastName" styleClass="input_silver" value="#{registrationController.lastname}">
+              <f:validateRequired />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="lastName" /><br/>
+
+            <label>Street: *</label>
+            <h:inputText id="street" styleClass="input_silver" value="#{registrationController.street}">
+              <f:validateRequired />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="street" /><br/>
+
+            <label>Zip: *</label>
+            <h:inputText id="zip" styleClass="input_silver" value="#{registrationController.zip}">
+              <f:validateRequired />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="zip" /><br/>
+
+            <label>Phone: *</label>
+            <h:inputText id="phone" styleClass="input_silver" value="#{registrationController.phone}">
+              <f:validateRequired />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="phone" /><br/>
+
+            <label>Email: *</label>
+            <h:inputText id="email" styleClass="input_silver" value="#{registrationController.email}">
+              <f:validateRequired />
+              <f:validator validatorId="emailValidator" />
+              <f:validator binding="#{uniqueEmailValidator}" />
+            </h:inputText>
+            <h:message styleClass="errorMessage" for="email" /><br/>
+
+            <label>Password: *</label>
+            <h:inputSecret id="password" styleClass="input_silver" value="#{registrationController.password}">
+              <f:validateRequired />
+            </h:inputSecret>
+            <h:message styleClass="errorMessage" for="password" /><br/>
+
+            <label>Confirm Password: *</label>
+            <h:inputSecret id="confirmPassword" styleClass="input_silver" value="#{registrationController.confirmPassword}">
+              <f:validateRequired />
+              <f:validator binding="#{passwordValidator}" />
+            </h:inputSecret>
+            <h:message styleClass="errorMessage" for="confirmPassword" /><br/>
+            <br/>
+
+            <h:commandButton styleClass="button_blue" value="REGISTER" action="#{registrationController.register()}" />
+
+            <div class="tracking_state"><h:outputText value="#{registrationController.state}"  /></div>
+          </h:form>
+        </div>
+      </div>
+    </ui:define>
+
+</ui:composition>
